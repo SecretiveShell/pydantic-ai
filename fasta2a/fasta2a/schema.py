@@ -17,7 +17,7 @@ class AgentCard(TypedDict):
     name: str
     """Human readable name of the agent e.g. "Recipe Agent"."""
 
-    description: NotRequired[str]
+    description: NotRequired[str | None]
     """A human-readable description of the agent.
 
     Used to assist users and other agents in understanding what the agent can do.
@@ -25,24 +25,24 @@ class AgentCard(TypedDict):
     """
 
     # TODO(Marcelo): The spec makes url required.
-    url: NotRequired[str]
+    url: NotRequired[str | None]
     """A URL to the address the agent is hosted at."""
 
-    provider: NotRequired[Provider]
+    provider: NotRequired[Provider | None]
     """The service provider of the agent."""
 
     # TODO(Marcelo): The spec makes version required.
-    version: NotRequired[str]
+    version: NotRequired[str | None]
     """The version of the agent - format is up to the provider. (e.g. "1.0.0")"""
 
-    documentation_url: NotRequired[str]
+    documentation_url: NotRequired[str | None]
     """A URL to documentation for the agent."""
 
     capabilities: Capabilities
     """The capabilities of the agent."""
 
     # TODO(Marcelo): The spec makes authentication required.
-    authentication: NotRequired[Authentication]
+    authentication: NotRequired[Authentication | None]
     """The authentication schemes supported by the agent.
 
     Intended to match OpenAPI authentication structure.
@@ -64,20 +64,20 @@ class Provider(TypedDict):
     """The service provider of the agent."""
 
     organization: str
-    url: NotRequired[str]
+    url: NotRequired[str | None]
 
 
 @pydantic.with_config(config={'alias_generator': to_camel})
 class Capabilities(TypedDict):
     """The capabilities of the agent."""
 
-    streaming: NotRequired[bool]
+    streaming: NotRequired[bool | None]
     """Whether the agent supports streaming."""
 
-    push_notifications: NotRequired[bool]
+    push_notifications: NotRequired[bool | None]
     """Whether the agent can notify updates to client."""
 
-    state_transition_history: NotRequired[bool]
+    state_transition_history: NotRequired[bool | None]
     """Whether the agent exposes status change history for tasks."""
 
 
@@ -88,7 +88,7 @@ class Authentication(TypedDict):
     schemes: list[str]
     """The authentication schemes supported by the agent. (e.g. "Basic", "Bearer")"""
 
-    credentials: NotRequired[str]
+    credentials: NotRequired[str | None]
     """The credentials a client should use for private cards."""
 
 
@@ -102,28 +102,28 @@ class Skill(TypedDict):
     name: str
     """Human readable name of the skill."""
 
-    description: NotRequired[str]
+    description: NotRequired[str | None]
     """A human-readable description of the skill.
 
     It will be used by the client or a human as a hint to understand the skill.
     """
 
-    tags: NotRequired[list[str]]
+    tags: NotRequired[list[str] | None]
     """Set of tag-words describing classes of capabilities for this specific skill.
 
     Examples: "cooking", "customer support", "billing".
     """
 
-    examples: NotRequired[list[str]]
+    examples: NotRequired[list[str] | None]
     """The set of example scenarios that the skill can perform.
 
     Will be used by the client as a hint to understand how the skill can be used. (e.g. "I need a recipe for bread")
     """
 
-    input_modes: NotRequired[list[str]]
+    input_modes: NotRequired[list[str] | None]
     """Supported mime types for input data."""
 
-    output_modes: NotRequired[list[str]]
+    output_modes: NotRequired[list[str] | None]
     """Supported mime types for output data."""
 
 
@@ -138,25 +138,25 @@ class Artifact(TypedDict):
     Artifacts.
     """
 
-    name: NotRequired[str]
+    name: NotRequired[str | None]
     """The name of the artifact."""
 
-    description: NotRequired[str]
+    description: NotRequired[str | None]
     """A description of the artifact."""
 
     parts: list[Part]
     """The parts that make up the artifact."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
     """Metadata about the artifact."""
 
     index: int
     """The index of the artifact."""
 
-    append: NotRequired[bool]
+    append: NotRequired[bool | None]
     """Whether to append this artifact to an existing one."""
 
-    last_chunk: NotRequired[bool]
+    last_chunk: NotRequired[bool | None]
     """Whether this is the last chunk of the artifact."""
 
 
@@ -187,10 +187,10 @@ class PushNotificationConfig(TypedDict):
     url: str
     """The URL to send push notifications to."""
 
-    token: NotRequired[str]
+    token: NotRequired[str | None]
     """Token unique to this task/session."""
 
-    authentication: NotRequired[Authentication]
+    authentication: NotRequired[Authentication | None]
     """Authentication details for push notifications."""
 
 
@@ -223,14 +223,14 @@ class Message(TypedDict):
     parts: list[Part]
     """The parts of the message."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
     """Metadata about the message."""
 
 
 class _BasePart(TypedDict):
     """A base class for all parts."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
 
 
 class TextPart(_BasePart):
@@ -258,10 +258,10 @@ class FilePart(_BasePart):
 class _BaseFile(_BasePart):
     """A base class for all file types."""
 
-    name: NotRequired[str]
+    name: NotRequired[str | None]
     """The name of the file."""
 
-    mime_type: NotRequired[str]
+    mime_type: NotRequired[str | None]
     """The mime type of the file."""
 
 
@@ -313,10 +313,10 @@ class TaskStatus(TypedDict):
     state: TaskState
     """The current state of the task."""
 
-    message: NotRequired[Message]
+    message: NotRequired[Message | None]
     """Additional status updates for client."""
 
-    timestamp: NotRequired[str]
+    timestamp: NotRequired[str | None]
     """ISO datetime value of when the status was updated."""
 
 
@@ -331,19 +331,19 @@ class Task(TypedDict):
     id: str
     """Unique identifier for the task."""
 
-    session_id: NotRequired[str]
+    session_id: NotRequired[str | None]
     """Client-generated id for the session holding the task."""
 
     status: TaskStatus
     """Current status of the task."""
 
-    history: NotRequired[list[Message]]
+    history: NotRequired[list[Message] | None]
     """Optional history of messages."""
 
-    artifacts: NotRequired[list[Artifact]]
+    artifacts: NotRequired[list[Artifact] | None]
     """Collection of artifacts created by the agent."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
     """Extension metadata."""
 
 
@@ -360,7 +360,7 @@ class TaskStatusUpdateEvent(TypedDict):
     final: bool
     """Indicates the end of the event stream."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
     """Extension metadata."""
 
 
@@ -374,7 +374,7 @@ class TaskArtifactUpdateEvent(TypedDict):
     artifact: Artifact
     """The artifact that was updated."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
     """Extension metadata."""
 
 
@@ -383,14 +383,14 @@ class TaskIdParams(TypedDict):
     """Parameters for a task id."""
 
     id: str
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
 
 
 @pydantic.with_config(config={'alias_generator': to_camel})
 class TaskQueryParams(TaskIdParams):
     """Query parameters for a task."""
 
-    history_length: NotRequired[int]
+    history_length: NotRequired[int | None]
     """Number of recent messages to be retrieved."""
 
 
@@ -401,19 +401,19 @@ class TaskSendParams(TypedDict):
     id: str
     """The id of the task."""
 
-    session_id: NotRequired[str]
+    session_id: NotRequired[str | None]
     """The server creates a new sessionId for new tasks if not set."""
 
     message: Message
     """The message to send to the agent."""
 
-    history_length: NotRequired[int]
+    history_length: NotRequired[int | None]
     """Number of recent messages to be retrieved."""
 
-    push_notification: NotRequired[PushNotificationConfig]
+    push_notification: NotRequired[PushNotificationConfig | None]
     """Where the server should send notifications when disconnected."""
 
-    metadata: NotRequired[dict[str, Any]]
+    metadata: NotRequired[dict[str, Any] | None]
     """Extension metadata."""
 
 
@@ -454,7 +454,7 @@ class JSONRPCError(TypedDict, Generic[CodeT, MessageT]):
 
     code: CodeT
     message: MessageT
-    data: NotRequired[Any]
+    data: NotRequired[Any | None]
 
 
 ResultT = TypeVar('ResultT')
@@ -464,8 +464,8 @@ ErrorT = TypeVar('ErrorT', bound=JSONRPCError[Any, Any])
 class JSONRPCResponse(JSONRPCMessage, Generic[ResultT, ErrorT]):
     """A JSON RPC response."""
 
-    result: NotRequired[ResultT]
-    error: NotRequired[ErrorT]
+    result: NotRequired[ResultT | None]
+    error: NotRequired[ErrorT | None]
 
 
 JSONParseError = JSONRPCError[Literal[-32700], Literal['Invalid JSON payload']]
