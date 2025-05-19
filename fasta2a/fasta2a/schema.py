@@ -64,7 +64,7 @@ class Provider(TypedDict):
     """The service provider of the agent."""
 
     organization: str
-    url: str
+    url: NotRequired[str]
 
 
 @pydantic.with_config(config={'alias_generator': to_camel})
@@ -102,13 +102,13 @@ class Skill(TypedDict):
     name: str
     """Human readable name of the skill."""
 
-    description: str
+    description: NotRequired[str]
     """A human-readable description of the skill.
 
     It will be used by the client or a human as a hint to understand the skill.
     """
 
-    tags: list[str]
+    tags: NotRequired[list[str]]
     """Set of tag-words describing classes of capabilities for this specific skill.
 
     Examples: "cooking", "customer support", "billing".
@@ -120,10 +120,10 @@ class Skill(TypedDict):
     Will be used by the client as a hint to understand how the skill can be used. (e.g. "I need a recipe for bread")
     """
 
-    input_modes: list[str]
+    input_modes: NotRequired[list[str]]
     """Supported mime types for input data."""
 
-    output_modes: list[str]
+    output_modes: NotRequired[list[str]]
     """Supported mime types for output data."""
 
 
@@ -261,7 +261,7 @@ class _BaseFile(_BasePart):
     name: NotRequired[str]
     """The name of the file."""
 
-    mime_type: str
+    mime_type: NotRequired[str]
     """The mime type of the file."""
 
 
